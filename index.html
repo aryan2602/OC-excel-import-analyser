@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Import Analyzer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<header class="topbar">
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="8" height="8" rx="2" fill="#6366f1"/><rect x="12" y="2" width="8" height="8" rx="2" fill="#6366f1" opacity=".5"/><rect x="2" y="12" width="8" height="8" rx="2" fill="#6366f1" opacity=".5"/><rect x="12" y="12" width="8" height="8" rx="2" fill="#6366f1"/></svg>
+    <span>Import Analyzer</span>
+  </div>
+  <nav class="top-nav">
+    <button class="nav-btn active" data-view="checklist">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3a1 1 0 011-1h10a1 1 0 010 2H3a1 1 0 01-1-1zm0 4a1 1 0 011-1h10a1 1 0 010 2H3a1 1 0 01-1-1zm0 4a1 1 0 011-1h10a1 1 0 010 2H3a1 1 0 01-1-1z"/></svg>
+      Checklists
+    </button>
+    <button class="nav-btn" data-view="assessment">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M6 2a2 2 0 00-2 2v1H3a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1V6a1 1 0 00-1-1h-1V4a2 2 0 00-2-2H6zm2 1h2a1 1 0 011 1v1H5V4a1 1 0 011-1H8zm-3 5a1 1 0 112 0 1 1 0 01-2 0zm5 0a1 1 0 112 0 1 1 0 01-2 0zm-5 3a1 1 0 112 0 1 1 0 01-2 0zm5 0a1 1 0 112 0 1 1 0 01-2 0z"/></svg>
+      Assessments
+    </button>
+    <button class="nav-btn" data-view="db">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><ellipse cx="8" cy="4" rx="6" ry="2"/><path d="M2 4v3c0 1.1 2.686 2 6 2s6-.9 6-2V4M2 7v3c0 1.1 2.686 2 6 2s6-.9 6-2V7M2 10v3c0 1.1 2.686 2 6 2s6-.9 6-2v-3"/></svg>
+      DB Reference
+    </button>
+  </nav>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span id="sidebar-title">Checklists</span>
+      <span class="sidebar-count" id="sidebar-count">0</span>
+    </div>
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search" placeholder="Search…" />
+    </div>
+    <ul class="sidebar-list" id="sidebar-list"></ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main-content">
+
+    <!-- CHECKLIST VIEW -->
+    <div id="view-checklist" class="view active">
+      <div class="upload-zone" id="upload-checklist-zone">
+        <div class="upload-inner">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#eef2ff"/><path d="M24 14v14M17 21l7-7 7 7" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 34h24" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <p class="upload-title">Upload Checklist Excel</p>
+          <p class="upload-sub">Drag & drop or click to select .xlsx file</p>
+          <p class="upload-hint">Expected sheets: <strong>Checklists, Sections, Questions</strong></p>
+          <button class="btn-primary" onclick="document.getElementById('file-checklist').click()">Choose File</button>
+          <input type="file" id="file-checklist" accept=".xlsx,.xls" hidden />
+        </div>
+      </div>
+      <div id="checklist-content" class="content-area hidden"></div>
+    </div>
+
+    <!-- ASSESSMENT VIEW -->
+    <div id="view-assessment" class="view hidden">
+      <div class="upload-zone" id="upload-assessment-zone">
+        <div class="upload-inner">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#eef2ff"/><path d="M24 14v14M17 21l7-7 7 7" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 34h24" stroke="#6366f1" stroke-width="2.5" stroke-linecap="round"/></svg>
+          <p class="upload-title">Upload Assessment Excel</p>
+          <p class="upload-sub">Drag & drop or click to select .xlsx file</p>
+          <p class="upload-hint">Expected sheets: <strong>TestsBITeam, QuestionsBiTeam</strong></p>
+          <button class="btn-primary" onclick="document.getElementById('file-assessment').click()">Choose File</button>
+          <input type="file" id="file-assessment" accept=".xlsx,.xls" hidden />
+        </div>
+      </div>
+      <div id="assessment-content" class="content-area hidden"></div>
+    </div>
+
+    <!-- DB VIEW -->
+    <div id="view-db" class="view hidden">
+      <div class="db-tabs">
+        <button class="db-tab active" data-tab="offerings">Offerings</button>
+        <button class="db-tab" data-tab="professions">Professions</button>
+        <button class="db-tab" data-tab="specialties">Specialties</button>
+      </div>
+      <div id="db-content" class="db-content"></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
