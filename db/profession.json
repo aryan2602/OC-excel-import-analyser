@@ -430,4 +430,28 @@
 "modified_by":1,
 "modified_date":"2026-04-27 14:42:09",
 "version":0
+},
+{ 
+"id":37,
+"code":"RN/LPN",
+"name":"RN/LPN",
+"offering_id":"NURSING",
+"is_active":"\u0001;",
+"created_by":1,
+"created_date":"2026-05-14 05:18:02",
+"modified_by":1,
+"modified_date":"2026-05-14 05:18:02",
+"version":0
+},
+{ 
+"id":38,
+"code":"PCT",
+"name":"PCT",
+"offering_id":"ALLIED",
+"is_active":"\u0001;",
+"created_by":1,
+"created_date":"2026-05-14 05:18:02",
+"modified_by":1,
+"modified_date":"2026-05-14 05:18:02",
+"version":0
 }]
