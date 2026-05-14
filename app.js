@@ -230,6 +230,22 @@ function validateChecklist(cl, sections, questions) {
     issues.push({ level: 'error', msg: `${orphanQ.length} question(s) reference unknown section codes` });
   }
 
+  const questionSectionCodes = new Set(questions.map(q => q['Section Code']).filter(Boolean));
+  const parentSectionCodes   = new Set(sections.map(s => s['Parent Section Code']).filter(Boolean));
+
+  sections.forEach(s => {
+    const sectionCode = s['Section Code'];
+    const isParent    = parentSectionCodes.has(sectionCode);
+    if (isParent) return; // skip container sections — they don't hold questions directly
+
+    const sectionName = s['Section Name'] || sectionCode;
+    if (!questionSectionCodes.has(sectionCode)) {
+      issues.push({
+        level: 'warning',
+        msg: `Section "${sectionName}" (${sectionCode}) has no questions assigned`,
+      });
+    }
+  });
   return issues;
 }
 
